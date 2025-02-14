@@ -5,14 +5,73 @@
   <meta name="viewport" content="width=device-width">
   <title>GITHUB TEST GA4 CD</title>
 </head>
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z42SGS7SGG"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z42SGS7SGG"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
   gtag('config', 'G-Z42SGS7SGG');
+
+  // Function to extract query parameters
+  function getQueryParams(url) {
+    const urlParams = new URLSearchParams(new URL(url).search);
+    const params = {};
+    for (const [key, value] of urlParams.entries()) {
+      params[key] = value;
+    }
+    return params;
+  }
+
+  // Function to get the full URL
+  function getFullURL() {
+    return window.location.href;
+  }
+
+    // Function to get query params
+  function getOnlyQueryParams() {
+    return window.location.search;
+  }
+
+  // Function to get the GA4 client ID
+  function getGA4ClientId() {
+    return new Promise((resolve) => {
+      gtag('get', 'G-Z42SGS7SGG', 'client_id', (clientId) => {
+        resolve(clientId);
+      });
+    });
+  }
+
+  // Send the events after the gtag function is defined.  This is important!
+  window.addEventListener('load', async () => {
+
+    const fullURL = getFullURL();
+    const queryParams = getQueryParams(fullURL);
+    const onlyQueryParams = getOnlyQueryParams();
+    const clientId = await getGA4ClientId();
+
+    gtag('event', 'page_view_with_params', {
+      'full_url': fullURL,
+      'query_params': queryParams,
+      'only_query_params': onlyQueryParams,
+      'client_id': clientId
+    });
+
+        gtag('event', 'full_url_captured', {
+      'full_url': fullURL
+    });
+
+        gtag('event', 'query_params_captured', {
+      'query_params': onlyQueryParams
+    });
+
+        gtag('event', 'client_id_captured', {
+      'client_id': clientId
+    });
+  });
+
+
+
 </script>
 <body>
 JBSMI TEST
